@@ -1,7 +1,5 @@
 # TaxMind — Intelligent Tax Filing Assistant
 
-A web application that provides AI-generated tax guidance based on user-submitted financial information. Built as part of the Deloitte AI Engineer Assessment (2026).
-
 > **Scope:** This application is scoped to Greek tax law and AADE regulations.
 
 ---
@@ -19,6 +17,9 @@ tax-filing-app/
 │       ├── ui.js
 │       └── main.js
 ├── backend/
+│   ├── services/
+│   │   ├── __init__.py
+│   │   └── openai_service.py
 │   ├── main.py
 │   ├── models.py
 │   ├── requirements.txt
@@ -32,6 +33,7 @@ tax-filing-app/
 
 - Python 3.10+
 - A modern web browser
+- An OpenAI API key
 
 ---
 
@@ -40,8 +42,8 @@ tax-filing-app/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/tax-filing-app.git
-cd tax-filing-app
+git clone https://github.com/atsiolis/intelligent-tax-filing-app.git
+cd intelligent-tax-filing-app
 ```
 
 ### 2. Set up the backend
@@ -130,7 +132,7 @@ Accepts tax form data and returns AI-generated advice.
 **Response:**
 ```json
 {
-  "advice": "Based on your submission..."
+  "advice": "1. Tax Situation Overview\n..."
 }
 ```
 
@@ -155,15 +157,33 @@ The JavaScript is split into four files, each with a single responsibility:
 | File | Responsibility |
 |------|---------------|
 | `validation.js` | Collects and validates form data before submission |
-| `api.js` | Handles communication with the backend, includes a mock response for development |
+| `api.js` | Handles communication with the backend |
 | `ui.js` | All DOM manipulation — showing and hiding elements |
 | `main.js` | Entry point — sets up event listeners and coordinates the other modules |
 
-### Development mode (no backend)
+---
 
-`api.js` includes a `USE_MOCK` flag at the top. When set to `true`, the frontend returns a mock response without needing the backend to be running. Set it to `false` to connect to the real backend.
+## AI Integration
 
-```javascript
-const USE_MOCK = true; // ← Set to false once backend is running
-```
+The AI integration is handled in `backend/services/openai_service.py`.
 
+When the user submits the form, the frontend sends the tax data to the `/api/tax-advice` endpoint. The backend builds a structured prompt from the data and sends it to the OpenAI API using the `gpt-4o-mini` model. The response is returned to the frontend and displayed in the result card.
+
+### Prompt Design
+
+The prompt instructs the model to return advice in four sections:
+
+1. **Tax Situation Overview** — a summary of the user's tax position
+2. **Deductions and Credits** — relevant deductions under Greek tax law
+3. **Employment Obligations** — obligations specific to their employment type
+4. **Next Steps** — 2 to 3 actionable steps
+
+The system prompt enforces plain text output (no markdown), general language without specific tax figures, and a disclaimer at the end of every response.
+
+### Model Settings
+
+| Setting | Value | Reason |
+|---------|-------|--------|
+| Model | `gpt-4o-mini` | Cost-efficient, fast, sufficient for structured advice |
+| Temperature | `0.3` | Low creativity for consistent, factual responses |
+| Max tokens | `800` | Enough headroom to avoid responses being cut off |
