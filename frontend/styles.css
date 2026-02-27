@@ -340,7 +340,7 @@ button[type="submit"]:disabled {
     padding: 1.25rem;
     font-size: 0.9rem;
     line-height: 1.75;
-    color: var(--text-muted);
+    color: var(--text);
     white-space: pre-wrap;
 }
 
