@@ -40,8 +40,8 @@ tax-filing-app/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/tax-filing-app.git
-cd tax-filing-app
+git clone https://github.com/atsiolis/intelligent-tax-filing-app.git
+cd intelligent-tax-filing-app
 ```
 
 ### 2. Set up the backend
