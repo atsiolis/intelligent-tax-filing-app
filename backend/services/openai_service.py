@@ -61,9 +61,9 @@ def build_prompt(data: TaxFormData) -> str:
     
     return f"""Here is the tax profile for the individual you are advising:
 
-- Gross annual income: €{data.income:,.2f}
-- Deductible expenses: €{data.expenses:,.2f}
-- Net taxable income: €{net_income:,.2f}
+- Gross annual income: €{data.income}
+- Deductible expenses: €{data.expenses}
+- Net taxable income: €{net_income}
 - Filing status: {filing_status}
 - Number of dependents: {data.dependents}
 - Employment type: {employment_type}
