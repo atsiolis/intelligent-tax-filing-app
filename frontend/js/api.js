@@ -5,7 +5,7 @@
 // =============================================
 
 const API_URL = 'http://localhost:8000/api/tax-advice';
-const USE_MOCK = true; // ← Set to false once backend is running
+const USE_MOCK = false; // ← Set to false once backend is running
 
 async function getAdvice(data) {
     return USE_MOCK
