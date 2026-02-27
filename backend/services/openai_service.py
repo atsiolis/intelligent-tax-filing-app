@@ -5,8 +5,10 @@
 # =============================================
 
 import os 
+import openai
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
+from fastapi import HTTPException
 from models import TaxFormData
 
 load_dotenv()
@@ -20,18 +22,31 @@ async def get_advice(data: TaxFormData) -> str:
     """
     
     prompt = build_prompt(data)
+    try:
+        response = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.3, # Low temperature for consistent, factual advice
+            max_tokens=800
+        )
+        return response.choices[0].message.content
     
-    response = await client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": prompt},
-        ],
-        temperature=0.3, # Low temperature for consistent, factual advice
-        max_tokens=800
-    )
+    except openai.AuthenticationError:
+        raise HTTPException(status_code=401, detail="Invalid OpenAI API key. Please check your .env file.")
+
+    except openai.RateLimitError:
+        raise HTTPException(status_code=429, detail="OpenAI rate limit reached. Please try again shortly.")
+
+    except openai.APIConnectionError:
+        raise HTTPException(status_code=503, detail="Could not connect to OpenAI. Please check your internet connection.")
+
+    except openai.APIStatusError as e:
+        raise HTTPException(status_code=502, detail=f"OpenAI returned an error: {e.message}")
+
     
-    return response.choices[0].message.content
     
     
     

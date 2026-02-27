@@ -32,7 +32,7 @@ form.addEventListener('submit', async (e) => {
         showResult(advice);
 
     } catch (err) {
-        showError('Something went wrong. Please check that the backend is running and try again.');
+        showError(err.message || 'Something went wrong. Please try again.');
         console.error('API Error:', err);
 
     } finally {

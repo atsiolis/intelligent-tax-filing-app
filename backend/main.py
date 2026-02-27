@@ -3,12 +3,21 @@
 #  FastAPI app entry point and routes.
 # =============================================
 
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models import TaxFormData, TaxAdviceResponse
+from dotenv import load_dotenv
 from services.openai_service import get_advice
 
-app = FastAPI(title="TaxMind API", version="1.0.0")
+load_dotenv()
+
+# --- Startup validation ---
+if not os.getenv("OPENAI_API_KEY"):
+    raise Exception("OPENAI_API_KEY environment variable not set. Please set it in .env.")
+
+
+app = FastAPI(title="Eforion API", version="1.0.0")
 
 # --- CORS ---
 # Allows the frontend (running on a different port) to call this API.
@@ -22,7 +31,7 @@ app.add_middleware(
 # --- Routes ---
 @app.get("/")
 def root():
-    return {"message": "TaxMind API is running."}
+    return {"message": "Eforion API is running."}
 
 
 @app.post("/api/tax-advice", response_model=TaxAdviceResponse)

@@ -1,4 +1,4 @@
-# TaxMind — Intelligent Tax Filing Assistant
+# Eforion — Intelligent Tax Filing Assistant
 
 > **Scope:** This application is scoped to Greek tax law and AADE regulations.
 
@@ -98,7 +98,7 @@ Health check. Returns a confirmation that the API is running.
 **Response:**
 ```json
 {
-  "message": "TaxMind API is running."
+  "message": "Eforion API is running."
 }
 ```
 
