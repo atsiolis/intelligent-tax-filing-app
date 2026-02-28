@@ -62,15 +62,5 @@ async def get_tax_advice(data: TaxFormData):
 
     advice = await get_advice(data)
 
-    # # --- Hardcoded response (will be replaced) ---
-    # advice = (
-    #     f"Based on your submission, your net taxable income is approximately "
-    #     f"€{net_income} after deducting expenses of €{data.expenses} "
-    #     f"from your gross income of €{data.income}.\n\n"
-    #     f"As a {data.employmentType.replace('_', '-')} individual filing as "
-    #     f"{data.filingStatus.replace('_', ' ')} with {data.dependents} dependent(s), "
-    #     f"you may be eligible for various deductions and credits under Greek tax law.\n\n"
-    #     f"This is a placeholder response. AI-generated advice will appear here in Step 3."
-    # )
 
     return TaxAdviceResponse(advice=advice)

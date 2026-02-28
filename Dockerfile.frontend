@@ -1,0 +1,16 @@
+# =============================================
+#  Dockerfile.frontend
+#  Serves the static frontend files using Nginx.
+# =============================================
+
+# Use official lightweight Nginx image
+FROM nginx:alpine
+
+# Remove default Nginx welcome page
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy frontend files into the Nginx web root
+COPY frontend/ /usr/share/nginx/html/
+
+# Expose port 80
+EXPOSE 80

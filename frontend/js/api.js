@@ -3,7 +3,9 @@
 //  Handles communication with the backend API
 // =============================================
 
-const API_URL = 'http://localhost:8000/api/tax-advice';
+const API_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000/api/tax-advice'
+    : 'http://backend:8000/api/tax-advice';
 const TIMEOUT_MS = 20000; // 20 seconds
 
 async function getAdvice(data) {

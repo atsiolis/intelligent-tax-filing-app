@@ -1,5 +1,7 @@
 # Eforion — Intelligent Tax Filing Assistant
 
+A web application that provides AI-generated tax guidance based on user-submitted financial information.
+
 > **Scope:** This application is scoped to Greek tax law and AADE regulations.
 
 ---
@@ -7,7 +9,7 @@
 ## Project Structure
 
 ```
-tax-filing-app/
+intelligent-tax-filing-app/
 ├── frontend/
 │   ├── index.html
 │   ├── styles.css
@@ -20,10 +22,16 @@ tax-filing-app/
 │   ├── services/
 │   │   ├── __init__.py
 │   │   └── openai_service.py
+│   ├── tests/
+│   │   ├── __init__.py
+│   │   └── test_main.py
 │   ├── main.py
 │   ├── models.py
 │   ├── requirements.txt
 │   └── .env.example
+├── Dockerfile.backend
+├── Dockerfile.frontend
+├── docker-compose.yml
 └── README.md
 ```
 
@@ -34,30 +42,50 @@ tax-filing-app/
 - Python 3.10+
 - A modern web browser
 - An OpenAI API key
+- Docker Desktop (for containerised setup)
 
 ---
 
 ## Getting Started
 
-### 1. Clone the repository
+### Option 1 — Run with Docker (recommended)
+
+Make sure Docker Desktop is running, then from the root of the project:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+Open `backend/.env` and add your OpenAI API key:
+
+```
+OPENAI_API_KEY=your-openai-api-key-here
+```
+
+Build and start both containers:
+
+```bash
+docker-compose up --build
+```
+
+The application will be available at `http://localhost`.
+
+---
+
+### Option 2 — Run locally
+
+#### 1. Clone the repository
 
 ```bash
 git clone https://github.com/atsiolis/intelligent-tax-filing-app.git
 cd intelligent-tax-filing-app
 ```
 
-### 2. Set up the backend
-
-Navigate to the backend folder and install dependencies:
+#### 2. Set up the backend
 
 ```bash
 cd backend
 pip install -r requirements.txt
-```
-
-Create a `.env` file from the example template:
-
-```bash
 cp .env.example .env
 ```
 
@@ -75,9 +103,21 @@ uvicorn main:app --reload
 
 The API will be available at `http://localhost:8000`.
 
-### 3. Run the frontend
+#### 3. Run the frontend
 
 Open `frontend/index.html` directly in your browser. No build step or server required.
+
+---
+
+## Running Tests
+
+From inside the `backend/` folder:
+
+```bash
+pytest tests/
+```
+
+The tests mock the OpenAI API so no API key is required to run them.
 
 ---
 
@@ -187,3 +227,22 @@ The system prompt enforces plain text output (no markdown), general language wit
 | Model | `gpt-4o-mini` | Cost-efficient, fast, sufficient for structured advice |
 | Temperature | `0.3` | Low creativity for consistent, factual responses |
 | Max tokens | `800` | Enough headroom to avoid responses being cut off |
+
+---
+
+## Docker
+
+The application is fully containerised using Docker.
+
+| File | Description |
+|------|-------------|
+| `Dockerfile.backend` | Packages the FastAPI backend using Python 3.12 slim |
+| `Dockerfile.frontend` | Serves the static frontend files using Nginx |
+| `docker-compose.yml` | Runs both containers together |
+
+To stop the containers:
+
+```bash
+docker-compose down
+```
+
