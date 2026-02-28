@@ -23,9 +23,13 @@ app = FastAPI(title="Eforion API", version="1.0.0")
 # Allows the frontend (running on a different port) to call this API.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace * with the frontend URL
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[
+        "http://localhost",
+        "http://localhost:80",
+        "http://127.0.0.1:5500",  # VS Code Live Server
+    ],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
 )
 
 # --- Routes ---
