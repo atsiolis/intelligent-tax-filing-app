@@ -1,0 +1,27 @@
+# =============================================
+#  docker-compose.yml
+#  Runs the frontend and backend containers
+#  together with a single command.
+# =============================================
+
+services:
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env  # Loads OPENAI_API_KEY from your .env file
+    volumes:
+      - ./backend:/app  # Mounts backend code for live reload during development
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend  # Ensures backend starts before frontend
