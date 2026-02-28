@@ -10,6 +10,9 @@ A web application that provides AI-generated tax guidance based on user-submitte
 
 ```
 intelligent-tax-filing-app/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 ├── frontend/
 │   ├── index.html
 │   ├── styles.css
@@ -114,7 +117,7 @@ Open `frontend/index.html` directly in your browser. No build step or server req
 From inside the `backend/` folder:
 
 ```bash
-pytest tests/
+pytest tests/ -v
 ```
 
 The tests mock the OpenAI API so no API key is required to run them.
@@ -246,3 +249,17 @@ To stop the containers:
 docker-compose down
 ```
 
+---
+
+## CI/CD
+
+A GitHub Actions pipeline is configured in `.github/workflows/ci.yml`.
+
+The pipeline runs automatically on every push to `main` and on every pull request targeting `main`. It performs the following steps:
+
+1. Checks out the repository
+2. Sets up Python 3.12
+3. Installs backend dependencies
+4. Runs the full test suite with `pytest tests/ -v`
+
+If any test fails the pipeline fails, preventing broken code from being merged into `main`.
