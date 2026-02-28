@@ -1,0 +1,38 @@
+# =============================================
+#  .github/workflows/ci.yml
+#  CI pipeline — runs on every push and pull
+#  request. Installs dependencies and runs
+#  the test suite.
+# =============================================
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        working-directory: backend
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        working-directory: backend
+        env:
+          OPENAI_API_KEY: "test-key"  # Dummy key — tests mock the OpenAI call
+        run: pytest tests/ -v
