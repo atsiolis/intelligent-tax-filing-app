@@ -8,7 +8,12 @@
 import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import patch, AsyncMock
-from main import app
+from main import app, limiter
+
+@pytest.fixture(autouse=True)
+def reset_limiter():
+    limiter.reset()
+    yield
 
 client = TestClient(app)
 
