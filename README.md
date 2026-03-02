@@ -27,10 +27,13 @@ intelligent-tax-filing-app/
 │   │   └── openai_service.py
 │   ├── tests/
 │   │   ├── __init__.py
-│   │   └── test_main.py
+│   │   ├── test_main.py
+│   │   ├── test_openai_service.py
+│   │   └── test_rate_limit.py
 │   ├── main.py
 │   ├── models.py
 │   ├── requirements.txt
+│   ├── pytest.ini
 │   └── .env.example
 ├── Dockerfile.backend
 ├── Dockerfile.frontend
@@ -122,6 +125,14 @@ pytest tests/ -v
 
 The tests mock the OpenAI API so no API key is required to run them.
 
+### Test Coverage
+
+| File | What it tests |
+|------|--------------|
+| `test_main.py` | API endpoint — valid requests, validation errors, missing fields |
+| `test_openai_service.py` | `build_prompt()` output and `get_advice()` error handling branches |
+| `test_rate_limit.py` | Rate limiting — requests within the limit succeed, excess requests are blocked |
+
 ---
 
 ## API Documentation
@@ -150,6 +161,8 @@ Health check. Returns a confirmation that the API is running.
 #### `POST /api/tax-advice`
 
 Accepts tax form data and returns AI-generated advice.
+
+**Rate limit:** 5 requests per minute per IP address.
 
 **Request body:**
 
@@ -188,6 +201,7 @@ Accepts tax form data and returns AI-generated advice.
 | `400` | Expenses exceed income |
 | `400` | Negative number of dependents |
 | `422` | Missing or malformed request fields |
+| `429` | Rate limit exceeded — more than 5 requests per minute |
 
 ---
 
@@ -230,6 +244,14 @@ The system prompt enforces plain text output (no markdown), general language wit
 | Model | `gpt-4o-mini` | Cost-efficient, fast, sufficient for structured advice |
 | Temperature | `0.3` | Low creativity for consistent, factual responses |
 | Max tokens | `800` | Enough headroom to avoid responses being cut off |
+
+---
+
+## Rate Limiting
+
+The `/api/tax-advice` endpoint is rate limited to **5 requests per minute per IP address** using [slowapi](https://github.com/laurentS/slowapi).
+
+Requests exceeding this limit receive a `429 Too Many Requests` response. This prevents abuse and controls OpenAI API costs.
 
 ---
 
