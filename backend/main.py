@@ -66,5 +66,4 @@ async def get_tax_advice(data: TaxFormData):
 
     advice = await get_advice(data)
 
-
     return TaxAdviceResponse(advice=advice)
