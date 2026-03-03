@@ -3,7 +3,11 @@
 //  Handles communication with the backend API
 // =============================================
 
-const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+const API_URL = (
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === ''
+)
     ? 'http://localhost:8000/api/tax-advice'
     : 'http://backend:8000/api/tax-advice';
 const TIMEOUT_MS = 20000; // 20 seconds
