@@ -4,11 +4,13 @@
 #  and calls the OpenAI API.
 # =============================================
 
-import os 
+import os
+
 import openai
-from openai import AsyncOpenAI
 from dotenv import load_dotenv
 from fastapi import HTTPException
+from openai import AsyncOpenAI
+
 from models import TaxFormData
 
 load_dotenv()

@@ -4,14 +4,16 @@
 # =============================================
 
 import os
+
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from models import TaxFormData, TaxAdviceResponse
-from dotenv import load_dotenv
-from services.openai_service import get_advice
 from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
+
+from models import TaxAdviceResponse, TaxFormData
+from services.openai_service import get_advice
 
 load_dotenv()
 
