@@ -23,6 +23,9 @@ function validateFormData(data) {
     if (data.expenses === null || isNaN(data.expenses) || data.expenses < 0) {
         return 'Please enter a valid expenses amount (must be 0 or greater).';
     }
+    if (data.expenses > data.income) {
+        return 'Expenses cannot exceed income.';
+    }
     if (!data.filingStatus) {
         return 'Please select your filing status.';
     }
