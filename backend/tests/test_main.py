@@ -5,10 +5,13 @@
 #  without a real API key.
 # =============================================
 
+from unittest.mock import AsyncMock, patch
+
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch, AsyncMock
+
 from main import app, limiter
+
 
 @pytest.fixture(autouse=True)
 def reset_limiter():

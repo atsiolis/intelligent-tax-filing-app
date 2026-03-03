@@ -5,12 +5,13 @@
 #  handling branches in get_advice().
 # =============================================
 
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
-from unittest.mock import patch, AsyncMock, MagicMock
 from fastapi import HTTPException
+
 from models import TaxFormData
 from services.openai_service import build_prompt, get_advice
-
 
 # ── Shared test data ─────────────────────────────────────────────
 

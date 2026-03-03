@@ -33,6 +33,7 @@ intelligent-tax-filing-app/
 │   ├── main.py
 │   ├── models.py
 │   ├── requirements.txt
+│   ├── ruff.toml
 │   ├── pytest.ini
 │   └── .env.example
 ├── Dockerfile.backend
@@ -132,6 +133,41 @@ The tests mock the OpenAI API so no API key is required to run them.
 | `test_main.py` | API endpoint — valid requests, validation errors, missing fields |
 | `test_openai_service.py` | `build_prompt()` output and `get_advice()` error handling branches |
 | `test_rate_limit.py` | Rate limiting — requests within the limit succeed, excess requests are blocked |
+
+---
+
+## Linting
+
+The project uses [Ruff](https://docs.astral.sh/ruff/) for linting. Ruff checks for code style issues, unused imports, and import ordering.
+
+From inside the `backend/` folder:
+
+```bash
+ruff check .
+```
+
+To automatically fix fixable issues (e.g. import ordering):
+
+```bash
+ruff check . --fix
+```
+
+Linting configuration is defined in `backend/ruff.toml`:
+
+```toml
+line-length = 130
+
+[lint]
+select = ["E", "F", "I"]
+```
+
+| Rule set | What it checks |
+|----------|---------------|
+| `E` | Code style errors |
+| `F` | Real bugs — unused imports, undefined names |
+| `I` | Import sorting and formatting |
+
+Ruff also runs automatically in the CI pipeline on every push and pull request — see [CI/CD](#cicd) below.
 
 ---
 
@@ -282,6 +318,7 @@ The pipeline runs automatically on every push to `main` and on every pull reques
 1. Checks out the repository
 2. Sets up Python 3.12
 3. Installs backend dependencies
-4. Runs the full test suite with `pytest tests/ -v`
+4. Runs Ruff to lint the codebase
+5. Runs the full test suite with `pytest tests/ -v`
 
-If any test fails the pipeline fails, preventing broken code from being merged into `main`.
+If linting or any test fails the pipeline fails, preventing broken code from being merged into `main`.
