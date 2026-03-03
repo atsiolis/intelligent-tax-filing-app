@@ -37,6 +37,7 @@ app.add_middleware(
         "http://localhost",
         "http://localhost:80",
         "http://127.0.0.1:5500",  # VS Code Live Server
+        "null"
     ],
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
