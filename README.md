@@ -155,7 +155,7 @@ ruff check . --fix
 Linting configuration is defined in `backend/ruff.toml`:
 
 ```toml
-line-length = 130
+line-length = 150
 
 [lint]
 select = ["E", "F", "I"]
