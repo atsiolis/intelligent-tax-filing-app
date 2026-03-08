@@ -6,6 +6,18 @@ A web application that provides AI-generated tax guidance based on user-submitte
 
 ---
 
+## Screenshots
+
+**Form**
+
+<img src="docs/screenshots/form.png" width="750" alt="Eforion form" />
+
+**Result**
+
+<img src="docs/screenshots/result.png" width="750" alt="Eforion result" />
+
+---
+
 ## Project Structure
 
 ```
@@ -13,6 +25,10 @@ intelligent-tax-filing-app/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml
+├── docs/
+│   └── screenshots/
+│       ├── form.png
+│       └── result.png
 ├── frontend/
 │   ├── index.html
 │   ├── styles.css
