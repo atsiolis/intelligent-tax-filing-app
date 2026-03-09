@@ -6,7 +6,7 @@
 import os
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -59,24 +59,6 @@ async def get_tax_advice(request: Request, data: TaxFormData):
     Receives tax form data from the frontend
     and returns AI-generated tax advice.
     """
-
-    valid_filing_statuses = {"single", "married_joint", "married_separate", "head_of_household"}
-    valid_employment_types = {"employed", "self_employed", "freelancer", "mixed"}
-
-    if data.filingStatus not in valid_filing_statuses:
-        raise HTTPException(status_code=400, detail=f"Invalid filing status. Must be one of: {', '.join(valid_filing_statuses)}")
-
-    if data.employmentType not in valid_employment_types:
-        raise HTTPException(status_code=400, detail=f"Invalid employment type. Must be one of: {', '.join(valid_employment_types)}")
-
-    if data.income < 0 or data.expenses < 0:
-        raise HTTPException(status_code=400, detail="Income and expenses must be non-negative.")
-
-    if data.expenses > data.income:
-        raise HTTPException(status_code=400, detail="Expenses cannot exceed income.")
-    
-    if data.dependents < 0:
-        raise HTTPException(status_code=400, detail="Dependents must be non-negative.")
 
     advice = await get_advice(data)
 

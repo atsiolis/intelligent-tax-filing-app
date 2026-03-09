@@ -104,8 +104,8 @@ def test_invalid_filing_status():
     payload = VALID_PAYLOAD.copy()
     payload["filingStatus"] = "invalid"
     response = client.post("/api/tax-advice", json=payload)
-    assert response.status_code == 400
-    assert "filing status" in response.json()["detail"].lower() 
+    assert response.status_code == 422
+    assert "filingStatus" in response.json()["detail"][0]["loc"]
     
     
 # =============================================
@@ -117,8 +117,8 @@ def test_invalid_employment_type():
     payload = VALID_PAYLOAD.copy()
     payload["employmentType"] = "invalid"
     response = client.post("/api/tax-advice", json=payload)
-    assert response.status_code == 400
-    assert "employment type" in response.json()["detail"].lower()
+    assert response.status_code == 422
+    assert "employmentType" in response.json()["detail"][0]["loc"]
     
 
 # =============================================
@@ -130,24 +130,23 @@ def test_negative_income():
     payload = VALID_PAYLOAD.copy()
     payload["income"] = -1
     response = client.post("/api/tax-advice", json=payload)
-    assert response.status_code == 400
-    assert "non-negative" in response.json()["detail"].lower()
-    
-    
+    assert response.status_code == 422
+    assert "income" in response.json()["detail"][0]["loc"]
+
 def test_negative_expenses():
     payload = VALID_PAYLOAD.copy()
     payload["expenses"] = -1
     response = client.post("/api/tax-advice", json=payload)
-    assert response.status_code == 400
-    assert "non-negative" in response.json()["detail"].lower()
+    assert response.status_code == 422
+    assert "expenses" in response.json()["detail"][0]["loc"]
     
     
 def test_expenses_exceed_income():
     payload = VALID_PAYLOAD.copy()
     payload["expenses"] = 60000
     response = client.post("/api/tax-advice", json=payload)
-    assert response.status_code == 400
-    assert "exceed income" in response.json()["detail"].lower()
+    assert response.status_code == 422
+    assert "cannot exceed income" in response.json()["detail"][0]["msg"]
     
     
 # =============================================
@@ -159,8 +158,8 @@ def test_invalid_dependents():
     payload = VALID_PAYLOAD.copy()
     payload["dependents"] = -1
     response = client.post("/api/tax-advice", json=payload)
-    assert response.status_code == 400  
-    assert "non-negative" in response.json()["detail"].lower()
+    assert response.status_code == 422
+    assert "dependents" in response.json()["detail"][0]["loc"]
     
 
 # =============================================
