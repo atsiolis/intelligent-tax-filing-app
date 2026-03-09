@@ -30,7 +30,13 @@ async function fetchAdviceFromBackend(data) {
 
         if (!response.ok) {
             const errorBody = await response.json().catch(() => ({}));
-            throw new Error(errorBody.detail || `Server responded with status ${response.status}`);
+
+            const detail = errorBody.detail;
+            const message = Array.isArray(detail)
+                ? detail.map(e => e.msg).join('\n')
+                : detail || `Server responded with status ${response.status}`;
+
+            throw new Error(message);
         }
 
         const result = await response.json();
