@@ -33,14 +33,14 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # --- CORS ---
 # Allows the frontend (running on a different port) to call this API.
+if not os.getenv("ALLOWED_ORIGINS"):
+    raise Exception("ALLOWED_ORIGINS environment variable not set. Please set it in .env.")
+
+origins = os.getenv("ALLOWED_ORIGINS").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost",
-        "http://localhost:80",
-        "http://127.0.0.1:5500",  # VS Code Live Server
-        "null"
-    ],
+    allow_origins=origins,
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
 )
