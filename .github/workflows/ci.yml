@@ -39,4 +39,5 @@ jobs:
         working-directory: backend
         env:
           OPENAI_API_KEY: "test-key"  # Dummy key — tests mock the OpenAI call
+          ALLOWED_ORIGINS: "http://localhost"
         run: pytest tests/ -v

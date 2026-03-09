@@ -79,10 +79,11 @@ Make sure Docker Desktop is running, then from the root of the project:
 cp backend/.env.example backend/.env
 ```
 
-Open `backend/.env` and add your OpenAI API key:
+Open `backend/.env` and fill in both variables:
 
 ```
 OPENAI_API_KEY=your-openai-api-key-here
+ALLOWED_ORIGINS=http://localhost,http://localhost:80
 ```
 
 Build and start both containers:
@@ -112,10 +113,11 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Open `.env` and add your OpenAI API key:
+Open `.env` and fill in both variables:
 
 ```
 OPENAI_API_KEY=your-openai-api-key-here
+ALLOWED_ORIGINS=http://localhost,http://127.0.0.1:5500
 ```
 
 Start the backend server:
@@ -128,7 +130,20 @@ The API will be available at `http://localhost:8000`.
 
 #### 3. Run the frontend
 
-Open `frontend/index.html` directly in your browser. No build step or server required.
+Serve the `frontend/` folder using a local server such as VS Code Live Server. The application will be available at `http://127.0.0.1:5500`.
+
+> **Note:** Opening `index.html` directly via `file://` is not supported.
+
+---
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `OPENAI_API_KEY` | Yes | Your OpenAI API key |
+| `ALLOWED_ORIGINS` | Yes | Comma-separated list of allowed CORS origins |
+
+The application will fail to start if either variable is missing. See `backend/.env.example` for reference.
 
 ---
 
@@ -162,7 +177,7 @@ From inside the `backend/` folder:
 ruff check .
 ```
 
-To automatically fix fixable issues (e.g. import ordering):
+To automatically fix fixable issues:
 
 ```bash
 ruff check . --fix
@@ -183,7 +198,7 @@ select = ["E", "F", "I"]
 | `F` | Real bugs — unused imports, undefined names |
 | `I` | Import sorting and formatting |
 
-Ruff also runs automatically in the CI pipeline on every push and pull request — see [CI/CD](#cicd) below.
+Ruff also runs automatically in the CI pipeline on every push and pull request.
 
 ---
 
@@ -237,7 +252,7 @@ Accepts tax form data and returns AI-generated advice.
 }
 ```
 
-**Response:**
+**Example response:**
 ```json
 {
   "advice": "1. Tax Situation Overview\n..."
@@ -248,11 +263,7 @@ Accepts tax form data and returns AI-generated advice.
 
 | Status | Reason |
 |--------|--------|
-| `400` | Invalid filing status or employment type |
-| `400` | Negative income or expenses |
-| `400` | Expenses exceed income |
-| `400` | Negative number of dependents |
-| `422` | Missing or malformed request fields |
+| `422` | Invalid or missing field values — see Pydantic validation |
 | `429` | Rate limit exceeded — more than 5 requests per minute |
 
 ---
